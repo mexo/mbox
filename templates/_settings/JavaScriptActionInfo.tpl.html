@@ -1,0 +1,29 @@
+<!--[if lt IE 7 ]>
+<script src="jslib/dd_belatedpng.js"></script>
+<script type="text/javascript">DD_belatedPNG.fix("img, .pngFix"); </script>
+<![endif]-->
+<!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if necessary -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="<!--{$javascriptLibraryPath}-->jquery/jquery-1.6.2.min.js">\x3C/script>')</script>
+<!--{if $javascriptLibraryIncludes|@count gt 0}-->
+<!--{foreach from = $javascriptLibraryIncludes item = javascriptLibraryInclude}-->
+<script type = "text/javascript" language = "javascript"  src ="<!--{$javascriptLibraryPath}--><!--{$javascriptLibraryInclude}-->"></script>
+<!--{/foreach}-->
+<!--{/if}-->
+<!--{if $javascriptExternal|@count gt 0}-->
+<!--{foreach from = $javascriptExternal item = javascriptExternalItem}-->
+<script type = "text/javascript" language = "javascript"  src ="<!--{$javascriptExternalItem}-->"></script>
+<!--{/foreach}-->
+<!--{/if}-->
+<!--{if $javaScriptActionInfo}-->
+<script  type = "text/javascript" language = "javascript"> var MBOX = <!--{$javaScriptActionInfo}-->;</script>
+<script type = "text/javascript" language = "javascript" src = "mbox/javascript/mbox.js" ></script>
+<!--{/if}-->
+<!--{if $javascriptInline}-->
+<script type = "text/javascript" language = "javascript" ><!--{$javascriptInline}--></script>
+<!--{/if}-->
+<!--{if $javascriptIncludes|@count gt 0}-->
+<!--{foreach from = $javascriptIncludes item = javascriptInclude}-->
+<script type = "text/javascript" language = "javascript"  src ="<!--{$javascriptPath}--><!--{$javascriptInclude}-->"></script>
+<!--{/foreach}-->
+<!--{/if}-->
