@@ -1,5 +1,9 @@
 <?php
 
+define("EXCEPTION_CODE",0);
+define("SYSTEM_EXCEPTION_CODE",1);
+define("USER_FRIENDLY_EXCEPTION_CODE",2);
+
 abstract class SiteObject {
 	
 	/**
@@ -14,16 +18,23 @@ abstract class SiteObject {
 	 */
 	protected $results = array();
 	
+	
 	public function __construct() {
-    try {
+		try {
+			$this->process();
 			
-    	$this->process();
-			
-		} catch (UserFriendyException $e) {
-	  	
-			$this->results['error'] = ExceptionRules::GetMessage( $e, $this->errorMessages );
-			SiteHelper::Debug( "SiteObject Exception: " , $this->results); 
-		
+		}catch(SiteObjectException $e){
+
+			if($e->getCode() === 1){
+				throw new SystemException($e->getMessage(),$e->getCode());
+			}else if($e->getCode() ===  2){
+				$this->userFriendlyException($e);
+			}else if($e->getCode() ===  0){
+				throw new Exception($e->getMessage(),$e->getCode());
+			}
+				
+		}catch (UserFriendlyException $e){
+			$this->userFriendlyException($e);
 		}
 	}
 	
@@ -31,6 +42,19 @@ abstract class SiteObject {
 
 	abstract protected function process();
 	
+	private function getErrorMessage($e){
+		
+		if(isset($this->errorMessages[$e->getCode()])){
+			return $this->errorMessages[$e->getCode()];
+		}
+		return $e->getMessage();
+	}
+	
+	private function userFriendlyException($e){
+			if(!isset($this->results['error'])){ $this->results['error'] = array(); }
+			$this->results['error'][] = $this->getErrorMessage($e);
+			SiteHelper::Debug( "SiteObject Exception: " , $e->__toString()); 
+	}
 }
 
 ?>

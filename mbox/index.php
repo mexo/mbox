@@ -1049,8 +1049,13 @@ class  LiteFrame {
 		return self::GetApplicationPath() . '?action=' . $action;
 		
 	}
+	
+	public static function getActiveAction(){
+		
+		return LiteFrame::$yAction['_LITE_']['ACTION'];
+	
+	}/* </ GetAction >  */
 
-	public static function GetAction(){ return self::$yAction['_LITE_']['ACTION']; }
   
  	public function IsAjax() {
 		

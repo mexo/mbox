@@ -20,7 +20,7 @@ require_once(LiteFrame::GetFileSystemPath()."includes/modules/debugging/Debug.cl
 
 class SiteHelper {
 	
-	static  $staticObjects = array();
+	static  $staticObjects = array("Title");
 	static  $tools;
 	public  static $siteObjectsData = null;
 	private $ajaxRequest = false;	
@@ -76,11 +76,7 @@ class SiteHelper {
 	}  /* </ Debug >  */
 	
 	
-	public static function GetAction(){
-		
-		return LiteFrame::$yAction['_LITE_']['ACTION'];
-	
-	}/* </ GetAction >  */
+
 	
 } /* </ SiteHelper >  */	
 

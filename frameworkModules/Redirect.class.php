@@ -3,20 +3,34 @@
 
 class Redirect {
 	
-	public static function Action( $action = 'homepage' ){
+	public static function action( $action = 'homepage', $querystring = array() ){
 		
 		$url = LiteFrame::BuildActionUrl( $action );
-		self::Url( $url );
+		if(sizeof($querystring) > 0 ){ $url .= '&'.http_build_query($querystring, '&'); }
+		self::redirectTo( $url );
 		
-	}/* </ Action > */	
+	}/* </ action > */	
 
 	
 	
-	public static function Url( $url ){
+	public static function redirectTo( $url ){
 		
 		header( 'Location: ' . $url );
 		
-	}/* </ Url > */	
+	}/* </ redirectTo > */	
+	
+	
+	
+	public static function removeFacebookQueryString(){
+		
+		$get = LiteFrame::FetchGetVariable();
+		unset($get['fb_comment_id']);
+		$action = $get['action'];
+		unset($get['action']);
+		self::action($action,$get);
+	
+	}/* </ removeFacebookQueryString > */	
+	
 	
 }/* </ Redirect > */	
 

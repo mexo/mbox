@@ -3,26 +3,10 @@
 
 /**
 * @name         Site Class 
-*
-* @uses          Site
-* @Package       Site
-* @subpackage    Site
 * @author        Mahdi Pedram
-* @author		 Scott Haselton
-* @category      Backend
 * @access        Mexo Programming Team
 * @version       1.0
-* @since         2010 - 12 - 21  2:36 AM ( Tuesday )
-* @copyright     Mexo LLC
-*
-*
-*
-*
-* Rules : 1 - Space between Each function					  :   4 Enter Breaks
-*         2 - Space between First Line of From Starting Brace :   1 Enter Break
-* 		    3 - Space between First Line of From Ending Brace   :   1 Enter Break
-* 		    4 - Space is  :  TAB
-*
+* @copyright     Mexo INC
 *
 */
 
@@ -49,6 +33,7 @@ class Site extends SiteHelper{
 			exit();
 			
 		}catch( Exception $e){
+			print_r($e);
 			SiteHelper::Debug($e->__toString());
 			LiteFrame::WriteLog( $e->__toString(), $e->getMessage() );
 			exit();
@@ -61,7 +46,8 @@ class Site extends SiteHelper{
 	private function process( $args ){
 
 			parent::__construct();
-			$requiredObjects = ObjectModule::GetArguments( $args );
+			
+			$requiredObjects = GlobalUtil::getArguments( $args );
 			
 			if(!LiteFrame::IsAjax()) {  $this->loadObjects( self::$staticObjects ); }
 			
@@ -77,17 +63,14 @@ class Site extends SiteHelper{
 	
 	
 	private function loadObjects( $requiredObjects ){
-   
-      foreach($requiredObjects as $obj){ 
-      	
-      	$this->generateObject( $obj, lcfirst($obj) );  
-      
-      } 
-		  
-  } /* </ loadObjects >  */	
+		//throw new Exception("shoot");
+		foreach($requiredObjects as $obj){ 
+			$this->generateObject( $obj, lcfirst($obj) );  
+		}
+	}/* </ loadObjects >  */	
 	
-  
-  private function generateObject($className, $field) {
+
+	private function generateObject($className, $field) {
 
 		$this->siteObjects[$field] = new $className();
 		
@@ -98,13 +81,13 @@ class Site extends SiteHelper{
 	
 	private function jsonrpc(){
 			parent::__construct();
-		  $post = LiteFrame::FetchPostVariable();
-		  $api = new $post['api']();
-		  self::$siteObjectsData[$post['api'] . "_" . $post['method']] = call_user_func_array(array($api, $post['method']), $post['config']);
-		  $this->setObjectsForTemplate(); 
+			$post = LiteFrame::FetchPostVariable();
+			$api = new $post['api']();
+			self::$siteObjectsData[$post['api'] . "_" . $post['method']] = call_user_func_array(array($api, $post['method']), $post['config']);
+			$this->setObjectsForTemplate(); 
 	}
 	
-}  /* </Site> */
+}	/* </Site> */
 
 
 ?>
