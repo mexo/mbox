@@ -9,7 +9,6 @@ if (!window.MBOX) {
 	mbox.init = function(){
 		
 		mbox.setVariables();
-		mbox.Application.init();
 		
 	};
 
@@ -39,40 +38,38 @@ if (!window.MBOX) {
 	mbox.getVar = function(key){ return mboxVars[key]; }
 
 	mbox.getActionVars = function(){ return mbox.yActionJson; }
+	
+	mbox.getUrl = function( action, parameters ){
+		var path = this.getVar('applicationPath');
+		if(action){
+			path += '?action='+action;
+		}
+		for( var property in parameters){
+			path += '&'+property+'='+parameters[property]
+		}
+		return path;
+	}; 
+	
+	mbox.getQueryStringObj = function(){
 
-	mbox.Application = {};
-	mbox.Application.Path  =  '';
-	mbox.Application.File  =  'index.php';
-	mbox.Application.init  =  function(){ this.Path = mbox.applicationPath;  };
-	mbox.Application.GetApplicationURL = function(action, parameters){
-
-		var valuePairs = [];
-	    if (action) { valuePairs.push('action='+action); }
-	    for (var property in parameters) { valuePairs.push(property + '=' + parameters[property]);  }
-	    var getString = '';
-	    if (valuePairs.length) { getString = '?' + valuePairs.join('&'); }
-	    return this.Path  + this.File + getString;
-	                
-	};    
+		var params = window.location.search.split("?"),
+			queryStringObj = {},
+			splittedParam =[];
+		
+		if(params.length > 1){
+			params = params[1].split("&");
+			for(var i = 0; i < params.length; i++){
+				splittedParam = params[i].split("=");
+				queryStringObj[splittedParam[0]] = splittedParam[1];
+			}
+		}
+		return queryStringObj;
+		
+	};
+	
 
 	
-	mbox.Application.QueryStringObject = function(){    
-	         
-	    var params = window.location.search.split("?"); 
-	    if (params.length <= 1){return false;}
-	    params = params[1].split("&");  
-	    if (params.length == 0){return false;}   
-	    var newParam = new Object();  
-	    for ( var i = 0 ; i < params.length ; i++){
-	        data  = params[i].split("=");
-	        newParam[data[0]] = data[1]  ;
-	    }        
-	    return  newParam;
-	    
-	}    
-	
-	
-	mbox.jsonRPC =  function( config ){
+	mbox.jsonRPC = function( config ){
 	
 			var base = {
 				context: config.scope || document.body,
@@ -84,7 +81,7 @@ if (!window.MBOX) {
 				dataType: 'json',
 				type: 'POST',
 				context: config.scope || document.body,
-				url: $_LITE_.Application.GetApplicationURL('jsonrpc')
+				url: this.getUrl('jsonrpc')
 			};
 			delete config.context;
 			delete config.api;
@@ -95,5 +92,3 @@ if (!window.MBOX) {
 
 })(MBOX);
 MBOX.init();
-
-
